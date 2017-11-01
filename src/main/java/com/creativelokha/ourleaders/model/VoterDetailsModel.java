@@ -17,7 +17,12 @@ public class VoterDetailsModel {
 	final static Logger LOGGER = Logger.getLogger(VoterDetailsModel.class);
 	final String TABLE_NAME = "voterId";
 
-	public List<VoterDetails> getAllVOterDetails(DBConnection con) {
+	public List<VoterDetails> getAllVoterDetails(DBConnection con) {
+		return null;
+	}
+	
+	public List<String> getAllVoterIds(DBConnection con) {
+		String query = "select voter_id " + TABLE_NAME + " (voter_id) values (?)";
 		return null;
 	}
 
