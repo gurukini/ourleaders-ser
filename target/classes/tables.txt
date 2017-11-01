@@ -1,0 +1,102 @@
+CREATE DATABASE our-leaders;
+
+DROP TABLE IF EXISTS country;
+DROP TABLE IF EXISTS state;
+DROP TABLE IF EXISTS assemblyConstituency;
+DROP TABLE IF EXISTS pollingSection;
+DROP TABLE IF EXISTS section;
+DROP TABLE IF EXISTS voterId;
+DROP TABLE IF EXISTS voterDetails;
+
+
+CREATE TABLE country (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(30) NOT NULL,
+     PRIMARY KEY (id)
+);
+
+CREATE TABLE state (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(30) NOT NULL,
+     country_id MEDIUMINT NOT NULL,
+	 CONSTRAINT fk_countryId FOREIGN KEY (country_id)
+	 REFERENCES country(id),
+     PRIMARY KEY (id)
+);
+
+CREATE TABLE assemblyConstituency (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(50) NOT NULL,
+	 state_id MEDIUMINT NOT NULL,
+	 lastUpdateDate DATETIME NOT NULL,
+	 CONSTRAINT fk_stateId FOREIGN KEY (state_id)
+	 REFERENCES state(id),
+     PRIMARY KEY (id)
+);
+
+CREATE TABLE pollingSection (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(250) NOT NULL,
+	 assembly_constituency_id MEDIUMINT NOT NULL,
+	 lastUpdateDate DATETIME NOT NULL,
+	 CONSTRAINT fk_assId FOREIGN KEY (assembly_constituency_id)
+	 REFERENCES assemblyConstituency(id),
+     PRIMARY KEY (id)
+);
+
+CREATE TABLE section (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(30) NOT NULL,
+	 polling_section_id MEDIUMINT NOT NULL,
+	 lastUpdateDate DATETIME NOT NULL,
+	 CONSTRAINT fk_polSecId FOREIGN KEY (polling_section_id)
+	 REFERENCES pollingSection(id),
+     PRIMARY KEY (id)
+);
+
+
+CREATE TABLE voterId (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     voter_id VARCHAR(20) NOT NULL,
+     PRIMARY KEY (id)
+);
+
+CREATE TABLE voterDetails (
+	 id MEDIUMINT NOT NULL AUTO_INCREMENT,
+	 part_number INT(5) NOT NULL,
+	 serial_number INT(5) NOT NULL,
+     first_name VARCHAR(30) NOT NULL,
+	 last_name VARCHAR(30) NOT NULL,
+	 relation_first_name VARCHAR(40) NOT NULL,
+	 sex VARCHAR(10) NOT NULL,
+	 age INT(3) NOT NULL,
+	 house_number VARCHAR(10) NOT NULL,
+	 old_id_number VARCHAR(20),
+	 id_status BOOLEAN NOT NULL DEFAULT 1,
+	 assembly_constituency_id MEDIUMINT NOT NULL,
+	 polling_section_id MEDIUMINT NOT NULL,
+	 section_id MEDIUMINT NOT NULL,
+	 voter_id VARCHAR(20) NOT NULL,
+	 lastUpdateDate DATETIME NOT NULL,
+	 CONSTRAINT fk_assId FOREIGN KEY (assembly_constituency_id)
+	 REFERENCES assemblyConstituency(id),
+	 CONSTRAINT fk_polSecId FOREIGN KEY (polling_section_id)
+	 REFERENCES pollingSection(id),
+	 CONSTRAINT fk_secId FOREIGN KEY (section_id)
+	 REFERENCES section(id),
+	 CONSTRAINT fk_voterId FOREIGN KEY (voter_id)
+	 REFERENCES voterId(id),
+	 INDEX (voter_id),
+     PRIMARY KEY (id)
+);
+
+insert into country(name) values("India");
+insert into state(name, country_id) values("Karnataka", 1);
+insert into assemblyConstituency(name, state_id, lastUpdateDate) values("Sringeri", 1, CURDATE());
+insert into pollingSection(name, assembly_constituency_id, lastUpdateDate) values("G H P S,Muttinakoppa", 1, CURDATE());
+insert into section(name, polling_section_id, lastUpdateDate) values("Mallikoppa", 1, CURDATE());
+
+
+
+
+
